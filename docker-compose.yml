@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  monitoring:
+    image: prom/prometheus
+
+  frontend:
+    image: nginx
