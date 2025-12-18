@@ -1,0 +1,49 @@
+schema: '2.0'
+stages:
+  extract_data:
+    cmd: python extract_data.py
+    outs:
+    - path: data/processed/data.csv
+      hash: md5
+      md5: 95d91ce89c05e1ae8cc9469e4311460e
+      size: 194756
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 95d91ce89c05e1ae8cc9469e4311460e
+      size: 194756
+  train_model:
+    cmd: python train.py
+    deps:
+    - path: data/processed/data.csv
+      hash: md5
+      md5: 95d91ce89c05e1ae8cc9469e4311460e
+      size: 194756
+    outs:
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: 90aba06c94f83b9916b99ba8ca0da90a
+      size: 21
+    - path: artifacts/model.pkl
+      hash: md5
+      md5: 77cea5413d9de6694df8342962e6bbc0
+      size: 1550772
+    - path: plots/feature_importance.png
+      hash: md5
+      md5: c5b4696f26f5d9d207c2f06532c3b5b5
+      size: 10194
+  inference_model:
+    cmd: python inference.py
+    deps:
+    - path: artifacts/model.pkl
+      hash: md5
+      md5: 77cea5413d9de6694df8342962e6bbc0
+      size: 1550772
+    - path: data/processed/data.csv
+      hash: md5
+      md5: 95d91ce89c05e1ae8cc9469e4311460e
+      size: 194756
+    outs:
+    - path: artifacts/predictions.csv
+      hash: md5
+      md5: 86a579f41e7dc28a66e2a543bd646b72
+      size: 2011

@@ -1,0 +1,25 @@
+stages:
+  extract_data:
+    cmd: python extract_data.py
+    outs:
+      - data/raw/data.csv
+      - data/processed/data.csv
+
+  train_model:
+    cmd: python train.py
+    deps:
+      - data/processed/data.csv
+    outs:
+      - artifacts/model.pkl
+    metrics:
+      - artifacts/metrics.json
+    plots:
+      - plots/feature_importance.png
+
+  inference_model:
+    cmd: python inference.py
+    deps:
+      - artifacts/model.pkl
+      - data/processed/data.csv
+    outs:
+      - artifacts/predictions.csv
