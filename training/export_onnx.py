@@ -4,12 +4,19 @@ from skl2onnx.common.data_types import FloatTensorType
 import onnx
 from datetime import datetime
 import subprocess
+from skl2onnx.common.data_types import FloatTensorType
+from skl2onnx.common.data_types import FloatTensorType
+from skl2onnx import to_onnx
 
 with open("artifacts/model.pkl", "rb") as f:
     model = pickle.load(f)
 
 initial_type = [("input", FloatTensorType([None, 10]))]
-onnx_model = convert_sklearn(model, initial_types=initial_type)
+onnx_model = to_onnx(
+    model,
+    X.astype(np.float32),
+    options={type(model): {"zipmap": False}}
+)
 
 def add_meta(key, value):
     meta = onnx_model.metadata_props.add()

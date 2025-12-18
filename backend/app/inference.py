@@ -1,16 +1,30 @@
-import numpy as np
 import json
+import numpy as np
 from app.model_loader import load_model
 
 session = load_model()
 
+INPUT_NAME = session.get_inputs()[0].name
+OUTPUT_NAMES = [o.name for o in session.get_outputs()]
+
 def predict_from_json(payload: str):
     data = np.array(json.loads(payload), dtype=np.float32)
-    if data.ndim != 2:
+
+    if data.ndim != 2 or data.shape[1] != 10:
         raise ValueError("Invalid input shape")
 
-    preds = session.run(None, {"input": data})[0]
+    labels, probabilities = session.run(
+        OUTPUT_NAMES,
+        {INPUT_NAME: data}
+    )
+
+    labels = labels.tolist()
+
+    probs = []
+    for p in probabilities:
+        probs.append({int(k): float(v) for k, v in p.items()})
+
     return {
-        "prediction": preds.argmax(axis=1).tolist(),
-        "raw_output": preds.tolist()
+        "label": labels,
+        "probabilities": probs
     }
