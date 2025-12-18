@@ -1,4 +1,0 @@
-numpy
-scikit-learn
-skl2onnx
-onnx
