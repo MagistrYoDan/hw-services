@@ -1,18 +1,30 @@
-version: "3.9"
+version: '3.8'
 
 services:
   backend:
     build: ./backend
+    container_name: ml_backend
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
 
   db:
     image: postgres:15
+    container_name: ml_db
     environment:
-      POSTGRES_PASSWORD: postgres
-
-  monitoring:
-    image: prom/prometheus
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: features_db
+    ports:
+      - "5432:5432"
 
   frontend:
-    image: nginx
+    image: nginx:alpine
+    container_name: ml_frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html

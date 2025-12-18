@@ -2,3 +2,8 @@ fastapi
 uvicorn
 onnxruntime
 numpy
+onnx
+matplotlib
+pandas
+scikit-learn
+python-multipart
